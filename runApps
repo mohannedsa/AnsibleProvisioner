@@ -1,0 +1,13 @@
+ ---
+  - hosts: localhost
+    tasks:
+      - name: Ensure docker dedaemons running
+        service:
+          name: docker
+          state: started
+        become: true
+
+      - name: run all
+        shell: |
+          cd Desktop/Docker/DOCKER_FILES/prom_jen/jenkins-prometheus-grafana/
+          docker compose up
