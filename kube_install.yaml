@@ -6,8 +6,8 @@
 
    - name: Install aptitude
      apt:
-        name: aptitude
-        state: latest
+       name: aptitude
+       state: latest
 
    - name: Install required system packages
      apt:
