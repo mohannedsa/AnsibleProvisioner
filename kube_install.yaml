@@ -83,9 +83,9 @@
         {
          "exec-opts": ["native.cgroupdriver=systemd"]
         }
-        
-    - name: restarting the docker
-      ansible.builtin.shell: |
+
+    - name: restarting_docker
+      shell: |
         systemctl daemon-reload
         systemctl restart docker
         systemctl restart kubelet
