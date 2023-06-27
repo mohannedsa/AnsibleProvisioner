@@ -83,3 +83,11 @@
         systemctl daemon-reload
         systemctl restart docker
         systemctl restart kubelet
+- hosts: localhost
+  become: yes
+  tasks:
+   - name: install kubectl
+     apt:
+       name: kubectl
+       state: present
+       force: yes
