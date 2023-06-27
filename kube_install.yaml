@@ -75,13 +75,14 @@
       apt:
        name: kubeadm
        state: present
+
     - name: Creating a daemon json
       copy:
-      dest: "/etc/docker/daemon1.json"
-      content: |
-       {
-       "exec-opts": ["native.cgroupdriver=systemd"]
-       }
+       dest: "/etc/docker/daemon1.json"
+       content: |
+        {
+        "exec-opts": ["native.cgroupdriver=systemd"]
+        }
     - name: restarting the docker
       ansible.builtin.shell: |
         systemctl daemon-reload
