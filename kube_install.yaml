@@ -1,92 +1,89 @@
+---
 - hosts: localhost
-  become: yes
+  become: true
   tasks:
-   - name: Make the Swap inactive
-     command: swapoff -a
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
 
-   - name: Install aptitude
-     apt:
-       name: aptitude
-       state: latest
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
 
-   - name: Install required system packages
-     apt:
-     pkg:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - software-properties-common
-        - python3-pip
-        - virtualenv
-        - python3-setuptools
-     state: latest
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
 
-   - name: Add Docker GPG apt Key
-     apt_key:
-       url: https://download.docker.com/linux/ubuntu/gpg
+    - name: Add Docker Repository
+      shell: |
+        echo \
+        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+        tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Make the Swap inactive
+      command: swapoff -a
+
+    - name: Docker Installation
+      apt:
+       name: docker.io
        state: present
+       update_cache: true
 
-   - name: Add Docker Repository
-     shell: |
-       echo \
-       "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-       "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-       tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-   - name: Update apt and install docker-ce
-     apt:
-       name: docker-ce
-       state: latest
-
-   - name: Install Docker Module for Python
-     pip:
-       name: docker
-
-   - name: install APT Transport HTTPS
-     apt:
+    - name: install APT Transport HTTPS
+      apt:
        name: apt-transport-https
        state: present
 
-   - name: add Kubernetes apt-key for APT repository
-     apt_key:
+    - name: add Kubernetes apt-key for APT repository
+      apt_key:
        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
        state: present
 
-   - name: add Kubernetes APT repository
-     apt_repository:
+    - name: add Kubernetes APT repository
+      apt_repository:
       repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
       state: present
       filename: 'kubernetes'
 
-   - name: install kubelet
-     apt:
+    - name: install kubelet
+      apt:
        name: kubelet
        state: present
        update_cache: true
 
-   - name: install kubeadm
-     apt:
+    - name: install kubeadm
+      apt:
        name: kubeadm
        state: present
-   - name: Creating a daemon json
-     copy:
+    - name: Creating a daemon json
+      copy:
       dest: "/etc/docker/daemon1.json"
       content: |
        {
        "exec-opts": ["native.cgroupdriver=systemd"]
        }
-
-   - name: restarting the docker
-     ansible.builtin.shell: |
-       systemctl daemon-reload
-       systemctl restart docker
-       systemctl restart kubelet
-
-- hosts: localhost
-  become: yes
-  tasks:
-   - name: install kubectl
-     apt:
-       name: kubectl
-       state: present
-       force: yes
+    - name: restarting the docker
+      ansible.builtin.shell: |
+        systemctl daemon-reload
+        systemctl restart docker
+        systemctl restart kubelet
