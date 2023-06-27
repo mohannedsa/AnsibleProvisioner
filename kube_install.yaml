@@ -60,6 +60,7 @@
           sudo mkdir -p /etc/apt/keyrings
           sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
           mkdir /etc/docker
+          apt install docker.io
 
     - name: install kubelet
       apt:
