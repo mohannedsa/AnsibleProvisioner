@@ -5,7 +5,7 @@
      command: swapoff -a
 
    - name: Install aptitude
-      apt:
+     apt:
         name: aptitude
         state: latest
 
