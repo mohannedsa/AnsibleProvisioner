@@ -55,6 +55,12 @@
        state: present
        filename: 'kubernetes'
 
+    - name: Add Docker Repository
+      shell: |
+          sudo mkdir -p /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+          mkdir /etc/docker
+
     - name: install kubelet
       apt:
        name: kubelet
