@@ -80,9 +80,7 @@
       copy:
        dest: "/etc/docker/daemon1.json"
        content: |
-        {
-        "exec-opts": ["native.cgroupdriver=systemd"]
-        }
+        {{"exec-opts": ["native.cgroupdriver=systemd"]}}
     - name: restarting the docker
       ansible.builtin.shell: |
         systemctl daemon-reload
