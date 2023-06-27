@@ -56,8 +56,8 @@
 
     - name: add Kubernetes apt-key for APT repository
       apt_key:
-       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-       state: present
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
 
     - name: add Kubernetes APT repository
       apt_repository:
