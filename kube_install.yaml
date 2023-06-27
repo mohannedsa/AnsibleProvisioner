@@ -94,3 +94,8 @@
        name: kubectl
        state: present
        force: yes
+   - name: Add Docker Repository
+     shell: |
+        kubeadm init
+        kubeadm config images pull
+        kubectl get pods
